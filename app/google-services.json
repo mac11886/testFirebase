@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "819833534082",
+    "firebase_url": "https://fir-demologin-22337.firebaseio.com",
+    "project_id": "fir-demologin-22337",
+    "storage_bucket": "fir-demologin-22337.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819833534082:android:4d0db149ba0a4bbd9a269b",
+        "android_client_info": {
+          "package_name": "com.example.firebasedemologin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819833534082-k3og7dpd0m6n4qsflv5u61mb5ol00t6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3nq-CRvPRVrcs_jZY2gLkkMP5Rl2pdrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "819833534082-k3og7dpd0m6n4qsflv5u61mb5ol00t6t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
