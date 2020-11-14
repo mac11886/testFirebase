@@ -24,7 +24,6 @@ class DashboardActivity : AppCompatActivity() {
 
         val currentUser = FirebaseAuth.getInstance().currentUser
         var reff = FirebaseDatabase.getInstance().getReference()
-        var maxid = 1
         var showText = findViewById<TextView>(R.id.showtextView)
         var database = FirebaseDatabase.getInstance().reference.child("Users") //create path
         var showTextDb = findViewById<TextView>(R.id.showtextView)

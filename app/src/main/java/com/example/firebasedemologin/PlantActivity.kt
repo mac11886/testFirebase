@@ -1,21 +1,28 @@
 package com.example.firebasedemologin
 
+import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.provider.MediaStore
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.squareup.picasso.Picasso
+import java.io.IOException
+import com.google.android.gms.tasks.OnSuccessListener as OnSuccessListener1
+
 
 class PlantActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var userId: String? = null
     lateinit var reff: DatabaseReference
     lateinit var filePath :Uri
-
+    var curFile: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_plant)
@@ -29,39 +36,38 @@ class PlantActivity : AppCompatActivity() {
         var dateofPlant = findViewById<TextView>(R.id.dateofplant)
         var dateOfStart = findViewById<TextView>(R.id.dateofstart)
         var infoAnnotationText = findViewById<TextView>(R.id.infoanno)
+        //var storageRef = FirebaseStorage.getInstance("images/").reference
+
+
 
         var getdataImage = object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                var imageinfo = snapshot.child("imageUrl")
-                editImage.
-
+                 var getdata = snapshot.child("imageUrl").value
+                val uri = Uri.parse(getdata.toString())
+                Picasso.get().load(getdata.toString().toUri()).into(editImage)
+                println("Picasso = " + getdata.toString().toUri())
+                println("getdata = " + getdata)
+                println("imageurl = " + getdata.toString())
+                println(snapshot.value)
+                //editImage.setImageURI(getdata)
             }
-
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
         }
-
+        database.addValueEventListener(getdataImage)
 
         var getdataNamePlant = object : ValueEventListener{ // get data from firebase name
             override fun onDataChange(snapshot: DataSnapshot) {
                 var sb = StringBuilder()
                     var name1=snapshot.child("plantName").value.toString()
-                     var name = database.child("plantName")
-                    println(name)
+
+
                     println("---------------------------")
                 println(name1)
                     namePlant.setText(name1)
 
-//                for(i in snapshot.children){
-//                    var name = i.child("plantName").getValue()
 //
-//                    //var phone1 = i.child("phone").getValue()
-//                    sb.append("${i.key} \n$name ")
-//                }
-                println("************************")
-               //namePlant.setText(sb).toString()
-                //println(namePlant.setText(sb).toString())
             }
             override fun onCancelled(error: DatabaseError) {
             }
@@ -95,8 +101,6 @@ class PlantActivity : AppCompatActivity() {
         }
         database.addValueEventListener(getdataDateApp)   //เรียกการใช้งาน
 
-
-
         var getdataInfoAnnotation = object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 var info = snapshot.child("anno").value.toString()
@@ -109,7 +113,32 @@ class PlantActivity : AppCompatActivity() {
         }
         database.addValueEventListener(getdataInfoAnnotation)   //เรียกการใช้งาน
     }
+    private fun isSelected() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent,"SELECT PICTURE"),1)
+
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 &&
+                data != null && data.data != null) {
+            filePath = data.data!!
+            var editImage = findViewById<ImageView>(R.id.editimageView)
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,filePath)
+                editImage.setImageBitmap(bitmap)
+            }catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
 }
+
+
 
 
 
