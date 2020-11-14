@@ -3,8 +3,6 @@ package com.example.firebasedemologin
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.renderscript.Sampler
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -39,17 +37,17 @@ class DashboardActivity : AppCompatActivity() {
         }
         userId = currentUser?.getUid()
         var user = findViewById<EditText>(R.id.user_editText)
-        var name = findViewById<EditText>(R.id.name_editText)
-        var phone = findViewById<EditText>(R.id.phone_editText)
+        var email = findViewById<EditText>(R.id.name_editText)
+        var password = findViewById<EditText>(R.id.phone_editText)
         var countchild = findViewById<TextView>(R.id.countTextView)
         var insertBtn = findViewById<Button>(R.id.insert_button)
 
         insertBtn.setOnClickListener {
             var usertext = user.text.toString()
-            var nametext = name.text.toString()
-            var phonetext = phone.text.toString()
+            var emailtext = email.text.toString()
+            var passwordtext = password.text.toString()
         //reff.child((maxid+1).toString()).setValue(Member(nametext,phonetext))
-            database.child(auth.uid.toString()).setValue(Member(nametext,phonetext))
+            database.child(auth.uid.toString()).setValue(User(usertext,emailtext,passwordtext))
             //database.child(nameuser).setValue(Member(nametext,phonetext))
             //database.child(user.toString()).setValue(Member(user,name,ph))
 
@@ -75,9 +73,10 @@ class DashboardActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var sb = StringBuilder()
                 for(i in snapshot.children){
-                    var username = i.child("name").getValue()
-                    var phone1 = i.child("phone").getValue()
-                    sb.append("${i.key} \n$username $phone1\n")
+                    var usernamedb = i.child("name").getValue()
+                    var emaildb = i.child("email").getValue()
+                    var passworddb = i.child("password").getValue()
+                    sb.append("${i.key} \n$usernamedb $emaildb\n $passworddb")
                 }
                 showTextDb.setText(sb)
             }
